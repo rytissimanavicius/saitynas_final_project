@@ -17,7 +17,8 @@ public class RatingDAOImpl implements RatingDAO {
 	
 	@Override
     public int addRating(Rating rating) {
-        int movieId = 0;
+        int result = 0;
+        
         try {
             String query = "INSERT INTO rating (internetMovieDatabase, rottenTomatoes, metacritic, metascore, imdb, imdbVotes, movieId) "
             		+ "VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -35,13 +36,92 @@ public class RatingDAOImpl implements RatingDAO {
             ResultSet generatedKeys = prepStmt.getGeneratedKeys();
 
             if (generatedKeys.next()) {
-            	movieId = generatedKeys.getInt(1);
+            	result = generatedKeys.getInt(1);
             }
         } catch (SQLException exc) {
             System.out.println(exc.getMessage());
             exc.printStackTrace();
         }
-
-        return movieId;
+        
+        return result;
     }
+	
+	@Override
+	public int deleteRatingById(int id) {
+		int result = 0;
+		
+        try {
+            String query = "DELETE FROM rating WHERE id = ?";
+
+            PreparedStatement prepStmt = connection.prepareStatement(query);
+            prepStmt.setInt(1, id);
+            
+            result += prepStmt.executeUpdate();
+            
+        } catch (SQLException exc) {
+            System.out.println(exc.getMessage());
+            exc.printStackTrace();
+        }
+        
+        return result;
+	}
+	
+	@Override
+	public int updateRatingById(Rating rating) {
+		int result = 0;
+		
+		try {
+            String query = "UPDATE rating SET internetMovieDatabase = ?, rottenTomatoes = ?, metacritic = ?, metascore = ?, " +
+                    "imdb = ?, imdbVotes = ?, movieID = ? WHERE id = ?";
+
+            PreparedStatement prepStmt = connection.prepareStatement(query);
+            prepStmt.setDouble(1, rating.getInternetMovieDatabase());
+            prepStmt.setDouble(2, rating.getRottenTomatoes());
+            prepStmt.setDouble(3, rating.getMetacritic());
+            prepStmt.setDouble(4, rating.getMetascore());
+            prepStmt.setDouble(5, rating.getImdb());
+            prepStmt.setInt(6, rating.getImdbVotes());
+            prepStmt.setInt(7, rating.getMovieId());
+            prepStmt.setInt(8, rating.getId());
+
+            result += prepStmt.executeUpdate();
+            
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            ex.printStackTrace();
+        }
+		
+		return result;
+	}
+	
+	@Override
+	public Rating getRatingById(int id) {
+		Rating rating = new Rating();
+		
+		try {
+            String query = "SELECT * FROM rating WHERE id = ?";
+
+            PreparedStatement prepStmt = connection.prepareStatement(query);
+            prepStmt.setInt(1, id);
+            
+            ResultSet result = prepStmt.executeQuery();
+            
+            while (result.next()) {
+                rating.setId(result.getInt(1));
+                rating.setInternetMovieDatabase(result.getDouble(2));
+                rating.setRottenTomatoes(result.getDouble(3));
+                rating.setMetacritic(result.getDouble(4));
+                rating.setMetascore(result.getDouble(5));
+                rating.setImdb(result.getDouble(6));
+                rating.setImdbVotes(result.getInt(7));
+                rating.setMovieId(result.getInt(8));
+            }
+            
+        } catch (SQLException exc) {
+            System.out.println(exc.getMessage());
+            exc.printStackTrace();
+        }
+		
+		return rating;
+	}
 }
