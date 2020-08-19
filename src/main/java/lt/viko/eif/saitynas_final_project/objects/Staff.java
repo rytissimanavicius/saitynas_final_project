@@ -1,13 +1,15 @@
 package lt.viko.eif.saitynas_final_project.objects;
 
 public class Staff {
+	private int id;
 	private String name;
 	private String surname;
 	private String role;
 	private String origin;
 	private int movieId;
 	
-	public Staff(String name, String surname, String role, String origin, int movieId) {
+	public Staff(int id, String name, String surname, String role, String origin, int movieId) {
+		this.id = id;
 		this.name = name;
 		this.surname = surname;
 		this.role = role;
@@ -17,6 +19,14 @@ public class Staff {
 	
 	public Staff() {
 		
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public String getName() {
