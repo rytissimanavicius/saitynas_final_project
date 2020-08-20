@@ -7,4 +7,5 @@ public interface StaffDAO {
 	public int deleteStaffById(int id);
 	public int updateStaffById(Staff staff);
 	public Staff getStaffById(int id);
+	public int getStaffId(String name);
 }

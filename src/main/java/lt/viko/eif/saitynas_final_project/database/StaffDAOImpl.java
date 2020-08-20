@@ -100,15 +100,15 @@ public class StaffDAOImpl implements StaffDAO {
             PreparedStatement prepStmt = connection.prepareStatement(query);
             prepStmt.setInt(1, id);
             
-            ResultSet result = prepStmt.executeQuery();
+            ResultSet resultSet = prepStmt.executeQuery();
             
-            while (result.next()) {
-                staff.setId(result.getInt(1));
-                staff.setName(result.getString(2));
-                staff.setSurname(result.getString(3));
-                staff.setRole(result.getString(4));
-                staff.setOrigin(result.getString(5));
-                staff.setMovieId(result.getInt(6));
+            while (resultSet.next()) {
+                staff.setId(resultSet.getInt(1));
+                staff.setName(resultSet.getString(2));
+                staff.setSurname(resultSet.getString(3));
+                staff.setRole(resultSet.getString(4));
+                staff.setOrigin(resultSet.getString(5));
+                staff.setMovieId(resultSet.getInt(6));
             }
             
         } catch (SQLException exc) {
@@ -117,5 +117,29 @@ public class StaffDAOImpl implements StaffDAO {
         }
 		
 		return staff;
+	}
+	
+	@Override
+	public int getStaffId(String name) {
+		int result = 0;
+		
+		try {
+            String query = "SELECT id FROM staff WHERE name = ?";
+
+            PreparedStatement prepStmt = connection.prepareStatement(query);
+            prepStmt.setString(1, name);
+            
+            ResultSet resultSet = prepStmt.executeQuery();
+            
+            while (resultSet.next()) {
+                result = resultSet.getInt(1);
+            }
+            
+        } catch (SQLException exc) {
+            System.out.println(exc.getMessage());
+            exc.printStackTrace();
+        }
+		
+		return result;
 	}
 }
