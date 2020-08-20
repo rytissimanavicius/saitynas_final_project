@@ -152,19 +152,19 @@ public class StaffDAOImpl implements StaffDAO {
 		String query = "";
 		List<Staff> foundStaff = null;
 		
-		if (staff.getName().length() > 0) {
+		if (!staff.getName().isEmpty()) {
 			query = "SELECT * FROM staff WHERE name = ?";
 			foundStaff = retrieveSuitableStaff(query, staff.getName());
 		}
-		else if (staff.getSurname().length() > 0) {
+		if (!staff.getSurname().isEmpty() && foundStaff.isEmpty()) {
 			query = "SELECT * FROM staff WHERE surname = ?";
 			foundStaff = retrieveSuitableStaff(query, staff.getSurname());
 		}
-		else if (staff.getRole().length() > 0) {
+		if (!staff.getRole().isEmpty() && foundStaff.isEmpty()) {
 			query = "SELECT * FROM staff WHERE role = ?";
 			foundStaff = retrieveSuitableStaff(query, staff.getRole());
 		}
-		else if (staff.getOrigin().length() > 0) {
+		if (!staff.getOrigin().isEmpty() && foundStaff.isEmpty()) {
 			query = "SELECT * FROM staff WHERE origin = ?";
 			foundStaff = retrieveSuitableStaff(query, staff.getOrigin());
 		}

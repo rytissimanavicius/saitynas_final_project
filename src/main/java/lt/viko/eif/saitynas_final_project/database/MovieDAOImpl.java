@@ -4,8 +4,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import lt.viko.eif.saitynas_final_project.objects.Movie;
+import lt.viko.eif.saitynas_final_project.objects.MovieSearch;
 
 public class MovieDAOImpl implements MovieDAO{
 	private Connection connection;
@@ -129,5 +132,152 @@ public class MovieDAOImpl implements MovieDAO{
         }
 		
 		return movie;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	@Override
+	public List<Movie> getMoviesByAttributes(MovieSearch movieSearch) {
+		String query = "";
+		List<Movie> foundMovies = null;
+
+		if (!movieSearch.getTitle().isEmpty()) {
+			query = "SELECT * FROM movie WHERE title = ?";
+			foundMovies = retrieveSuitableMovies(query, movieSearch.getTitle());
+		}
+		if (movieSearch.getYear() > 0 && foundMovies.isEmpty()) {
+			query = "SELECT * FROM movie WHERE year = ?";
+			foundMovies = retrieveSuitableMovies(query, String.valueOf(movieSearch.getYear()));
+		}
+		if (!movieSearch.getRatedAs().isEmpty() && foundMovies.isEmpty()) {
+			query = "SELECT * FROM movie WHERE ratedAs = ?";
+			foundMovies = retrieveSuitableMovies(query, movieSearch.getRatedAs());
+		}
+		//
+		//PAGAL LAIKA METODO REIKIA
+		//
+		
+		//
+		//PAGAL KALBAS METODO REIKIA
+		//
+		if (!movieSearch.getCountry().isEmpty() && foundMovies.isEmpty()) {
+			query = "SELECT * FROM movie WHERE country = ?";
+			foundMovies = retrieveSuitableMovies(query, movieSearch.getCountry());
+		}
+		if (!movieSearch.getType().isEmpty() && foundMovies.isEmpty()) {
+			query = "SELECT * FROM movie WHERE type = ?";
+			foundMovies = retrieveSuitableMovies(query, movieSearch.getType());
+		}
+		if (!movieSearch.getProducedBy().isEmpty() && foundMovies.isEmpty()) {
+			query = "SELECT * FROM movie WHERE producedBy = ?";
+			foundMovies = retrieveSuitableMovies(query, movieSearch.getProducedBy());
+		}
+		
+		int matches = 0, maxMatches = 0;
+		List<Integer> movieAttributeMatches = new ArrayList<Integer>();
+		
+		for (Movie temp : foundMovies) {
+			matches = 0;
+			
+			if (temp.getTitle().equals(movieSearch.getTitle()))
+				matches++;
+			if (temp.getYear() == movieSearch.getYear())
+				matches++;
+			if (temp.getRatedAs().equals(movieSearch.getRatedAs()))
+				matches++;
+			//
+			//PAGAL LAIKA METODO REIKIA
+			//
+			
+			//
+			//PAGAL KALBAS METODO REIKIA
+			//
+			if (temp.getCountry().equals(movieSearch.getCountry()))
+				matches++;
+			if (temp.getType().equals(movieSearch.getType()))
+				matches++;
+			if (temp.getProducedBy().equals(movieSearch.getProducedBy()))
+				matches++;
+			
+			if (matches > maxMatches)
+				maxMatches = matches;
+			
+			movieAttributeMatches.add(matches);
+		}
+		
+		List<Integer> movieIds = new ArrayList<Integer>();
+		
+		for (int i = 0; i < movieAttributeMatches.size(); i++) 
+			if (movieAttributeMatches.get(i) == maxMatches && !movieIds.contains(foundMovies.get(i).getId())) 
+				movieIds.add(foundMovies.get(i).getId());
+		
+		List<Movie> retrievedMovies = new ArrayList<Movie>();
+		
+		for (Integer id : movieIds) 
+			retrievedMovies.add(getMovieById(id));
+		
+		return retrievedMovies;
+	}
+	
+	public List<Movie> retrieveSuitableMovies(String query, String option) {
+		Movie movie = null;
+		List<Movie> foundMovies = new ArrayList<Movie>();
+		
+		try {
+			PreparedStatement prepStmt = connection.prepareStatement(query);
+            prepStmt.setString(1, option);
+            
+            ResultSet resultSet = prepStmt.executeQuery();
+            while (resultSet.next()) {
+            	movie = new Movie();
+                movie.setId(resultSet.getInt(1));
+                movie.setTitle(resultSet.getString(2));
+                movie.setYear(resultSet.getInt(3));
+                movie.setRatedAs(resultSet.getString(4));
+                movie.setLengthMinutes(resultSet.getInt(5));
+                movie.setLanguages(resultSet.getString(6));
+                movie.setCountry(resultSet.getString(7));
+                movie.setType(resultSet.getString(8));
+                movie.setProducedBy(resultSet.getString(9));
+                movie.setGenreId(resultSet.getInt(10));
+                foundMovies.add(movie);
+                movie = null;
+            }
+            
+        } catch (SQLException exc) {
+            System.out.println(exc.getMessage());
+            exc.printStackTrace();
+        }
+		
+		return foundMovies;
 	}
 }
