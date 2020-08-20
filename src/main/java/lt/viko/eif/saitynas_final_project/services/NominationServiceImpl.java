@@ -17,10 +17,9 @@ import lt.viko.eif.saitynas_final_project.database.NominationDAO;
 import lt.viko.eif.saitynas_final_project.database.NominationDAOImpl;
 import lt.viko.eif.saitynas_final_project.objects.Nomination;
 
-@Path("genre")
+@Path("nomination")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-
 public class NominationServiceImpl implements NominationService{
 	private NominationDAO nominationDAO = new NominationDAOImpl();
 
