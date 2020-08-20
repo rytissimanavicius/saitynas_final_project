@@ -4,11 +4,15 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
+import lt.viko.eif.saitynas_final_project.objects.Movie;
 import lt.viko.eif.saitynas_final_project.objects.Staff;
 
 public class StaffDAOImpl implements StaffDAO {
 	private Connection connection;
+	private MovieDAO movieDAO = new MovieDAOImpl();
 	
 	public StaffDAOImpl() {
         SqlConnection sqlConnection = new SqlConnection();
@@ -119,7 +123,7 @@ public class StaffDAOImpl implements StaffDAO {
 		return staff;
 	}
 	
-	@Override
+	/*@Override
 	public int getStaffId(String name) {
 		int result = 0;
 		
@@ -141,5 +145,92 @@ public class StaffDAOImpl implements StaffDAO {
         }
 		
 		return result;
+	}*/
+	
+	@Override
+	public List<Movie> getMoviesByStaff(Staff staff) {
+		String query = "";
+		List<Staff> foundStaff = null;
+		
+		if (staff.getName().length() > 0) {
+			query = "SELECT * FROM staff WHERE name = ?";
+			foundStaff = retrieveSuitableStaff(query, staff.getName());
+		}
+		else if (staff.getSurname().length() > 0) {
+			query = "SELECT * FROM staff WHERE surname = ?";
+			foundStaff = retrieveSuitableStaff(query, staff.getSurname());
+		}
+		else if (staff.getRole().length() > 0) {
+			query = "SELECT * FROM staff WHERE role = ?";
+			foundStaff = retrieveSuitableStaff(query, staff.getRole());
+		}
+		else if (staff.getOrigin().length() > 0) {
+			query = "SELECT * FROM staff WHERE origin = ?";
+			foundStaff = retrieveSuitableStaff(query, staff.getOrigin());
+		}
+		
+		
+		int matches = 0, maxMatches = 0;
+		List<Integer> staffAttributeMatches = new ArrayList<Integer>();
+		
+		for (Staff temp : foundStaff) {
+			matches = 0;
+			
+			if (temp.getName().equals(staff.getName()))
+				matches++;
+			if (temp.getSurname().equals(staff.getSurname()))
+				matches++;
+			if (temp.getRole().equals(staff.getRole()))
+				matches++;
+			if (temp.getOrigin().equals(staff.getOrigin()))
+				matches++;
+			
+			if (matches > maxMatches)
+				maxMatches = matches;
+			
+			staffAttributeMatches.add(matches);
+		}
+		
+		List<Integer> movieIds = new ArrayList<Integer>();
+		
+		for (int i = 0; i < staffAttributeMatches.size(); i++) 
+			if (staffAttributeMatches.get(i) == maxMatches && !movieIds.contains(foundStaff.get(i).getMovieId())) 
+				movieIds.add(foundStaff.get(i).getMovieId());
+		
+		List<Movie> retrievedMovies = new ArrayList<Movie>();
+		
+		for (Integer id : movieIds) 
+			retrievedMovies.add(movieDAO.getMovieById(id));
+		
+		return retrievedMovies;
+	}
+	
+	public List<Staff> retrieveSuitableStaff(String query, String option) {
+		Staff staff = null;
+		List<Staff> foundStaff = new ArrayList<Staff>();
+		
+		try {
+			PreparedStatement prepStmt = connection.prepareStatement(query);
+            prepStmt.setString(1, option);
+            
+            ResultSet resultSet = prepStmt.executeQuery();
+            while (resultSet.next()) {
+            	staff = new Staff();
+                staff.setId(resultSet.getInt(1));
+                staff.setName(resultSet.getString(2));
+                staff.setSurname(resultSet.getString(3));
+                staff.setRole(resultSet.getString(4));
+                staff.setOrigin(resultSet.getString(5));
+                staff.setMovieId(resultSet.getInt(6));
+                foundStaff.add(staff);
+                staff = null;
+            }
+            
+        } catch (SQLException exc) {
+            System.out.println(exc.getMessage());
+            exc.printStackTrace();
+        }
+		
+		return foundStaff;
 	}
 }

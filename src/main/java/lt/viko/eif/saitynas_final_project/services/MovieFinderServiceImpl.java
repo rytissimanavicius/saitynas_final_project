@@ -1,36 +1,35 @@
 package lt.viko.eif.saitynas_final_project.services;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import javax.ws.rs.GET;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import lt.viko.eif.saitynas_final_project.database.StaffDAO;
 import lt.viko.eif.saitynas_final_project.database.StaffDAOImpl;
 import lt.viko.eif.saitynas_final_project.objects.Movie;
+import lt.viko.eif.saitynas_final_project.objects.Staff;
 
+@Path("finder")
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
 public class MovieFinderServiceImpl implements MovieFinderService{
 	private StaffDAO staffDAO = new StaffDAOImpl();
 	
-	@GET
+	@PUT
 	@Override
-	@Path("{name}")
-	public Response findMovieByGenre(@PathParam("name") String name, @Context UriInfo uriInfo) {
-		return Response.ok("TEMP").build();
-		//int genreId = staffDAO.getStaffId(name);
-		//List<Movie> movies = new ArrayList<Movie>();
+	public Response getMoviesByStaff(Staff staff, @Context UriInfo uriInfo) {
+		List<Movie> retrievedMovies = staffDAO.getMoviesByStaff(staff);
 		
-		/*Staff staff = staffDAO.getStaffById(id);
+		if (retrievedMovies.size() > 0)
+			return Response.ok(retrievedMovies).build();
 		
-		if (staff != null) {
-			//
-			return Response.ok(staff).build();
-		}
-		return Response.serverError().build();*/
+		return Response.serverError().build();
 	}
 }
