@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: 2020 m. Rgp 20 d. 07:02
+-- Generation Time: 2020 m. Rgp 23 d. 10:59
 -- Server version: 10.4.10-MariaDB
 -- PHP Version: 7.3.12
 
@@ -62,14 +62,15 @@ CREATE TABLE IF NOT EXISTS `movie` (
   `genreId` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `movie_ibfk_1` (`genreId`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_lithuanian_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_lithuanian_ci;
 
 --
 -- Sukurta duomenų kopija lentelei `movie`
 --
 
 INSERT INTO `movie` (`id`, `title`, `year`, `ratedAs`, `lengthMinutes`, `languages`, `country`, `type`, `producedBy`, `genreId`) VALUES
-(1, 'The Avengers', 2012, 'PG-13', 143, 'English;Russian;Hindi', 'USA', 'Movie', 'Walt Disney Pictures', 1);
+(1, 'The Avengers', 2012, 'PG-13', 143, 'English;Russian;Hindi', 'USA', 'Movie', 'Walt Disney Pictures', 1),
+(6, 'Avengers: Endgame', 2019, 'PG-13', 181, 'English, Japanese, Xhosa, German', 'USA', 'Movie', 'Marvel Studios', 1);
 
 -- --------------------------------------------------------
 
@@ -138,14 +139,19 @@ CREATE TABLE IF NOT EXISTS `staff` (
   `movieId` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `movieId` (`movieId`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_lithuanian_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_lithuanian_ci;
 
 --
 -- Sukurta duomenų kopija lentelei `staff`
 --
 
 INSERT INTO `staff` (`id`, `name`, `surname`, `role`, `origin`, `movieId`) VALUES
-(1, 'Joss', 'Whedon', 'Director/Writer', 'USA, New York', 1);
+(1, 'Joss', 'Whedon', 'Director/Writer', 'USA, New York', 1),
+(3, 'Chris', 'Hemsworth', 'Actor', 'Australia', 1),
+(4, 'Scarlett', 'Johansson', 'Actor', 'USA', 1),
+(5, 'Jeremy', 'Renner', 'Actor', 'USA', 1),
+(7, 'Chris', 'Evans', 'Actor', 'USA', 1),
+(8, 'Chris', 'Pratt', 'Actor', 'USA', 6);
 
 --
 -- Apribojimai eksportuotom lentelėm

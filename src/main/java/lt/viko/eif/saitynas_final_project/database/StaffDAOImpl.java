@@ -123,30 +123,6 @@ public class StaffDAOImpl implements StaffDAO {
 		return staff;
 	}
 	
-	/*@Override
-	public int getStaffId(String name) {
-		int result = 0;
-		
-		try {
-            String query = "SELECT id FROM staff WHERE name = ?";
-
-            PreparedStatement prepStmt = connection.prepareStatement(query);
-            prepStmt.setString(1, name);
-            
-            ResultSet resultSet = prepStmt.executeQuery();
-            
-            while (resultSet.next()) {
-                result = resultSet.getInt(1);
-            }
-            
-        } catch (SQLException exc) {
-            System.out.println(exc.getMessage());
-            exc.printStackTrace();
-        }
-		
-		return result;
-	}*/
-	
 	@Override
 	public List<Movie> getMoviesByStaff(Staff staff) {
 		String query = "";
@@ -156,39 +132,40 @@ public class StaffDAOImpl implements StaffDAO {
 			query = "SELECT * FROM staff WHERE name = ?";
 			foundStaff = retrieveSuitableStaff(query, staff.getName());
 		}
-		if (!staff.getSurname().isEmpty() && foundStaff.isEmpty()) {
+		if (!staff.getSurname().isEmpty() && foundStaff == null) {
 			query = "SELECT * FROM staff WHERE surname = ?";
 			foundStaff = retrieveSuitableStaff(query, staff.getSurname());
 		}
-		if (!staff.getRole().isEmpty() && foundStaff.isEmpty()) {
+		if (!staff.getRole().isEmpty() && foundStaff == null) {
 			query = "SELECT * FROM staff WHERE role = ?";
 			foundStaff = retrieveSuitableStaff(query, staff.getRole());
 		}
-		if (!staff.getOrigin().isEmpty() && foundStaff.isEmpty()) {
+		if (!staff.getOrigin().isEmpty() && foundStaff == null) {
 			query = "SELECT * FROM staff WHERE origin = ?";
 			foundStaff = retrieveSuitableStaff(query, staff.getOrigin());
 		}
 		
-		
 		int matches = 0, maxMatches = 0;
 		List<Integer> staffAttributeMatches = new ArrayList<Integer>();
 		
-		for (Staff temp : foundStaff) {
-			matches = 0;
-			
-			if (temp.getName().equals(staff.getName()))
-				matches++;
-			if (temp.getSurname().equals(staff.getSurname()))
-				matches++;
-			if (temp.getRole().equals(staff.getRole()))
-				matches++;
-			if (temp.getOrigin().equals(staff.getOrigin()))
-				matches++;
-			
-			if (matches > maxMatches)
-				maxMatches = matches;
-			
-			staffAttributeMatches.add(matches);
+		if (foundStaff != null) {
+			for (Staff temp : foundStaff) {
+				matches = 0;
+				
+				if (temp.getName().equals(staff.getName()))
+					matches++;
+				if (temp.getSurname().equals(staff.getSurname()))
+					matches++;
+				if (temp.getRole().equals(staff.getRole()))
+					matches++;
+				if (temp.getOrigin().equals(staff.getOrigin()))
+					matches++;
+				
+				if (matches > maxMatches)
+					maxMatches = matches;
+				
+				staffAttributeMatches.add(matches);
+			}
 		}
 		
 		List<Integer> movieIds = new ArrayList<Integer>();

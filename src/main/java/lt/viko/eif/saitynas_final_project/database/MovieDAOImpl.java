@@ -169,35 +169,37 @@ public class MovieDAOImpl implements MovieDAO{
 	public List<Movie> getMoviesByAttributes(MovieSearch movieSearch) {
 		String query = "";
 		List<Movie> foundMovies = null;
-
+		
 		if (!movieSearch.getTitle().isEmpty()) {
 			query = "SELECT * FROM movie WHERE title = ?";
 			foundMovies = retrieveSuitableMovies(query, movieSearch.getTitle());
 		}
-		if (movieSearch.getYear() > 0 && foundMovies.isEmpty()) {
+		if (movieSearch.getYear() > 0 && foundMovies == null) {
 			query = "SELECT * FROM movie WHERE year = ?";
 			foundMovies = retrieveSuitableMovies(query, String.valueOf(movieSearch.getYear()));
 		}
-		if (!movieSearch.getRatedAs().isEmpty() && foundMovies.isEmpty()) {
+		if (!movieSearch.getRatedAs().isEmpty() && foundMovies == null) {
 			query = "SELECT * FROM movie WHERE ratedAs = ?";
 			foundMovies = retrieveSuitableMovies(query, movieSearch.getRatedAs());
 		}
-		//
-		//PAGAL LAIKA METODO REIKIA
-		//
-		
-		//
-		//PAGAL KALBAS METODO REIKIA
-		//
-		if (!movieSearch.getCountry().isEmpty() && foundMovies.isEmpty()) {
+		if (movieSearch.getLengthMinutesMin() > 0 && movieSearch.getLengthMinutesMax() > movieSearch.getLengthMinutesMin() 
+				&& foundMovies == null) {
+			query = "SELECT * FROM movie WHERE lengthMinutes between ? and ?";
+			foundMovies = retrieveSuitableMoviesBetweenLengths(query, movieSearch.getLengthMinutesMin(), movieSearch.getLengthMinutesMax());
+		}
+		if (!movieSearch.getLanguage().isEmpty() && foundMovies == null) {
+			query = "SELECT * FROM movie WHERE languages LIKE ?";
+			foundMovies = retrieveSuitableMovies(query, "%" + movieSearch.getLanguage() + "%");
+		}
+		if (!movieSearch.getCountry().isEmpty() && foundMovies == null) {
 			query = "SELECT * FROM movie WHERE country = ?";
 			foundMovies = retrieveSuitableMovies(query, movieSearch.getCountry());
 		}
-		if (!movieSearch.getType().isEmpty() && foundMovies.isEmpty()) {
+		if (!movieSearch.getType().isEmpty() && foundMovies == null) {
 			query = "SELECT * FROM movie WHERE type = ?";
 			foundMovies = retrieveSuitableMovies(query, movieSearch.getType());
 		}
-		if (!movieSearch.getProducedBy().isEmpty() && foundMovies.isEmpty()) {
+		if (!movieSearch.getProducedBy().isEmpty() && foundMovies == null) {
 			query = "SELECT * FROM movie WHERE producedBy = ?";
 			foundMovies = retrieveSuitableMovies(query, movieSearch.getProducedBy());
 		}
@@ -205,33 +207,32 @@ public class MovieDAOImpl implements MovieDAO{
 		int matches = 0, maxMatches = 0;
 		List<Integer> movieAttributeMatches = new ArrayList<Integer>();
 		
-		for (Movie temp : foundMovies) {
-			matches = 0;
-			
-			if (temp.getTitle().equals(movieSearch.getTitle()))
-				matches++;
-			if (temp.getYear() == movieSearch.getYear())
-				matches++;
-			if (temp.getRatedAs().equals(movieSearch.getRatedAs()))
-				matches++;
-			//
-			//PAGAL LAIKA METODO REIKIA
-			//
-			
-			//
-			//PAGAL KALBAS METODO REIKIA
-			//
-			if (temp.getCountry().equals(movieSearch.getCountry()))
-				matches++;
-			if (temp.getType().equals(movieSearch.getType()))
-				matches++;
-			if (temp.getProducedBy().equals(movieSearch.getProducedBy()))
-				matches++;
-			
-			if (matches > maxMatches)
-				maxMatches = matches;
-			
-			movieAttributeMatches.add(matches);
+		if (foundMovies != null) {
+			for (Movie temp : foundMovies) {
+				matches = 0;
+				
+				if (temp.getTitle().equals(movieSearch.getTitle()))
+					matches++;
+				if (temp.getYear() == movieSearch.getYear())
+					matches++;
+				if (temp.getRatedAs().equals(movieSearch.getRatedAs()))
+					matches++;
+				if (temp.getLengthMinutes() >= movieSearch.getLengthMinutesMin() && temp.getLengthMinutes() <= movieSearch.getLengthMinutesMax())
+					matches++;
+				if (temp.getLanguages().contains(movieSearch.getLanguage()))
+					matches++;
+				if (temp.getCountry().equals(movieSearch.getCountry()))
+					matches++;
+				if (temp.getType().equals(movieSearch.getType()))
+					matches++;
+				if (temp.getProducedBy().equals(movieSearch.getProducedBy()))
+					matches++;
+				
+				if (matches > maxMatches)
+					maxMatches = matches;
+				
+				movieAttributeMatches.add(matches);
+			}
 		}
 		
 		List<Integer> movieIds = new ArrayList<Integer>();
@@ -255,6 +256,40 @@ public class MovieDAOImpl implements MovieDAO{
 		try {
 			PreparedStatement prepStmt = connection.prepareStatement(query);
             prepStmt.setString(1, option);
+            
+            ResultSet resultSet = prepStmt.executeQuery();
+            while (resultSet.next()) {
+            	movie = new Movie();
+                movie.setId(resultSet.getInt(1));
+                movie.setTitle(resultSet.getString(2));
+                movie.setYear(resultSet.getInt(3));
+                movie.setRatedAs(resultSet.getString(4));
+                movie.setLengthMinutes(resultSet.getInt(5));
+                movie.setLanguages(resultSet.getString(6));
+                movie.setCountry(resultSet.getString(7));
+                movie.setType(resultSet.getString(8));
+                movie.setProducedBy(resultSet.getString(9));
+                movie.setGenreId(resultSet.getInt(10));
+                foundMovies.add(movie);
+                movie = null;
+            }
+            
+        } catch (SQLException exc) {
+            System.out.println(exc.getMessage());
+            exc.printStackTrace();
+        }
+		
+		return foundMovies;
+	}
+	
+	public List<Movie> retrieveSuitableMoviesBetweenLengths(String query, int min, int max) {
+		Movie movie = null;
+		List<Movie> foundMovies = new ArrayList<Movie>();
+		
+		try {
+			PreparedStatement prepStmt = connection.prepareStatement(query);
+			prepStmt.setInt(1, min);
+			prepStmt.setInt(2, max);
             
             ResultSet resultSet = prepStmt.executeQuery();
             while (resultSet.next()) {
