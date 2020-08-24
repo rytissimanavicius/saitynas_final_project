@@ -4,11 +4,15 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import lt.viko.eif.saitynas_final_project.objects.Genre;
+import lt.viko.eif.saitynas_final_project.objects.Movie;
 
 public class GenreDAOImpl implements GenreDAO{
 private Connection connection;
+private MovieDAO movieDAO = new MovieDAOImpl();
 	
 	public GenreDAOImpl() {
         SqlConnection sqlConnection = new SqlConnection();
@@ -105,5 +109,69 @@ private Connection connection;
 		return genre;
 	}
 	
-	
+	@Override
+	public List<Movie> getMoviesByGenres(Genre genre) {
+		String query = "";
+		List<Genre> foundGenre = null;
+		
+		if (!genre.getName().isEmpty()) {
+			//query = "SELECT * FROM genre WHERE name = ?";
+			query = "SELECT * FROM movie WHERE genreId = (SELECT id FROM genre WHERE name = ?)";
+			foundGenre = retrieveSuitableGenre(query, genre.getName());
+		}
+		
+		int matches = 0, maxMatches = 0;
+		List<Integer> genreAttributeMatches = new ArrayList<Integer>();
+		
+		if (foundGenre != null) {
+			for (Genre temp : foundGenre) {
+				matches = 0;
+				
+				if (temp.getName().equals(genre.getName()))
+					matches++;
+				
+				if (matches > maxMatches)
+					maxMatches = matches;
+				
+				genreAttributeMatches.add(matches);
+			}
+		}
+		
+		List<Integer> movieIds = new ArrayList<Integer>();
+		
+		for (int i = 0; i < genreAttributeMatches.size(); i++) 
+			if (genreAttributeMatches.get(i) == maxMatches && !movieIds.contains(foundGenre.get(i).getId())) 
+				movieIds.add(foundGenre.get(i).getId());
+		
+		List<Movie> retrievedMovies = new ArrayList<Movie>();
+		
+		for (Integer id : movieIds) 
+			retrievedMovies.add(movieDAO.getMovieById(id));
+		
+		return retrievedMovies;
+	}
+
+	public List<Genre> retrieveSuitableGenre(String query, String option) {
+		Genre genre = null;
+		List<Genre> foundGenre = new ArrayList<Genre>();
+		
+		try {
+			PreparedStatement prepStmt = connection.prepareStatement(query);
+            prepStmt.setString(1, option);
+            
+            ResultSet resultSet = prepStmt.executeQuery();
+            while (resultSet.next()) {
+            	genre = new Genre();
+                genre.setId(resultSet.getInt(1));
+                genre.setName(resultSet.getString(2));
+                foundGenre.add(genre);
+                genre = null;
+            }
+            
+        } catch (SQLException exc) {
+            exc.printStackTrace();
+        }
+		
+		return foundGenre;
+	}
 }
