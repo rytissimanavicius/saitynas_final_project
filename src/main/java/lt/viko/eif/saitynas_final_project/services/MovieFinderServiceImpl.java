@@ -19,7 +19,7 @@ import lt.viko.eif.saitynas_final_project.database.StaffDAO;
 import lt.viko.eif.saitynas_final_project.database.StaffDAOImpl;
 import lt.viko.eif.saitynas_final_project.objects.Movie;
 import lt.viko.eif.saitynas_final_project.objects.MovieSearch;
-import lt.viko.eif.saitynas_final_project.objects.Rating;
+import lt.viko.eif.saitynas_final_project.objects.RatingSearch;
 import lt.viko.eif.saitynas_final_project.objects.Staff;
 
 @Path("finder")
@@ -57,8 +57,8 @@ public class MovieFinderServiceImpl implements MovieFinderService{
 	@POST
 	@Path("byRatings")
 	@Override
-	public Response getMoviesByRatings(Rating rating, @Context UriInfo uriInfo) {
-		List<Movie> retrievedMovies = ratingDAO.getMoviesByRatings(rating);
+	public Response getMoviesByRatings(RatingSearch ratingSearch, @Context UriInfo uriInfo) {
+		List<Movie> retrievedMovies = ratingDAO.getMoviesByRatings(ratingSearch);
 		
 		if (retrievedMovies.size() > 0)
 			return Response.ok(retrievedMovies).build();

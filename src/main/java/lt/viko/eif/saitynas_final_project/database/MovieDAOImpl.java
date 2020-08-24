@@ -139,32 +139,32 @@ public class MovieDAOImpl implements MovieDAO{
 			query = "SELECT * FROM movie WHERE title = ?";
 			foundMovies = retrieveSuitableMovies(query, movieSearch.getTitle());
 		}
-		if (movieSearch.getYear() > 0 && foundMovies == null) {
+		if (movieSearch.getYear() > 0 && foundMovies.isEmpty()) {
 			query = "SELECT * FROM movie WHERE year = ?";
 			foundMovies = retrieveSuitableMovies(query, String.valueOf(movieSearch.getYear()));
 		}
-		if (!movieSearch.getRatedAs().isEmpty() && foundMovies == null) {
+		if (!movieSearch.getRatedAs().isEmpty() && foundMovies.isEmpty()) {
 			query = "SELECT * FROM movie WHERE ratedAs = ?";
 			foundMovies = retrieveSuitableMovies(query, movieSearch.getRatedAs());
 		}
 		if (movieSearch.getLengthMinutesMin() > 0 && movieSearch.getLengthMinutesMax() > movieSearch.getLengthMinutesMin() 
-				&& foundMovies == null) {
+				&& foundMovies.isEmpty()) {
 			query = "SELECT * FROM movie WHERE lengthMinutes between ? and ?";
 			foundMovies = retrieveSuitableMoviesBetweenLengths(query, movieSearch.getLengthMinutesMin(), movieSearch.getLengthMinutesMax());
 		}
-		if (!movieSearch.getLanguage().isEmpty() && foundMovies == null) {
+		if (!movieSearch.getLanguage().isEmpty() && foundMovies.isEmpty()) {
 			query = "SELECT * FROM movie WHERE languages LIKE ?";
 			foundMovies = retrieveSuitableMovies(query, "%" + movieSearch.getLanguage() + "%");
 		}
-		if (!movieSearch.getCountry().isEmpty() && foundMovies == null) {
+		if (!movieSearch.getCountry().isEmpty() && foundMovies.isEmpty()) {
 			query = "SELECT * FROM movie WHERE country = ?";
 			foundMovies = retrieveSuitableMovies(query, movieSearch.getCountry());
 		}
-		if (!movieSearch.getType().isEmpty() && foundMovies == null) {
+		if (!movieSearch.getType().isEmpty() && foundMovies.isEmpty()) {
 			query = "SELECT * FROM movie WHERE type = ?";
 			foundMovies = retrieveSuitableMovies(query, movieSearch.getType());
 		}
-		if (!movieSearch.getProducedBy().isEmpty() && foundMovies == null) {
+		if (!movieSearch.getProducedBy().isEmpty() && foundMovies.isEmpty()) {
 			query = "SELECT * FROM movie WHERE producedBy = ?";
 			foundMovies = retrieveSuitableMovies(query, movieSearch.getProducedBy());
 		}
