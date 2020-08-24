@@ -4,11 +4,15 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
+import lt.viko.eif.saitynas_final_project.objects.Movie;
 import lt.viko.eif.saitynas_final_project.objects.Nomination;
 
 public class NominationDAOImpl implements NominationDAO{
 	private Connection connection;
+	private MovieDAO movieDAO = new MovieDAOImpl();
 	
 	public NominationDAOImpl() {
         SqlConnection sqlConnection = new SqlConnection();
@@ -111,4 +115,83 @@ public class NominationDAOImpl implements NominationDAO{
 		return nomination;
 	}
 
+	@Override
+	public List<Movie> getMoviesByNominations(Nomination nomination) {
+		String query = "";
+		List<Nomination> foundNomination = null;
+		
+		if (!nomination.getName().isEmpty()) {
+			query = "SELECT * FROM nomination WHERE name = ?";
+			foundNomination = retrieveSuitableNomination(query, nomination.getName());
+		}
+		if (!nomination.getYear().isEmpty() && foundNomination == null) {
+			query = "SELECT * FROM nomination WHERE year = ?";
+			foundNomination = retrieveSuitableNomination(query, nomination.getYear());
+		}
+		if (nomination.isWon() != null && foundNomination == null) {
+			query = "SELECT * FROM nomination WHERE won = ?";
+			foundNomination = retrieveSuitableNomination(query, String.valueOf(nomination.isWon()));
+		}
+		
+		int matches = 0, maxMatches = 0;
+		List<Integer> nominationAttributeMatches = new ArrayList<Integer>();
+		
+		if (foundNomination != null) {
+			for (Nomination temp : foundNomination) {
+				matches = 0;
+				
+				if (temp.getName().equals(nomination.getName()))
+					matches++;
+				if (temp.getYear().equals(nomination.getYear()))
+					matches++;
+				if (temp.isWon() == (nomination.isWon()))
+					matches++;
+				
+				if (matches > maxMatches)
+					maxMatches = matches;
+				
+				nominationAttributeMatches.add(matches);
+			}
+		}
+		
+		List<Integer> movieIds = new ArrayList<Integer>();
+		
+		for (int i = 0; i < nominationAttributeMatches.size(); i++) 
+			if (nominationAttributeMatches.get(i) == maxMatches && !movieIds.contains(foundNomination.get(i).getMovieId())) 
+				movieIds.add(foundNomination.get(i).getMovieId());
+		
+		List<Movie> retrievedMovies = new ArrayList<Movie>();
+		
+		for (Integer id : movieIds) 
+			retrievedMovies.add(movieDAO.getMovieById(id));
+		
+		return retrievedMovies;
+	}
+
+	public List<Nomination> retrieveSuitableNomination(String query, String option) {
+		Nomination nomination = null;
+		List<Nomination> foundNomination = new ArrayList<Nomination>();
+		
+		try {
+			PreparedStatement prepStmt = connection.prepareStatement(query);
+            prepStmt.setString(1, option);
+            
+            ResultSet resultSet = prepStmt.executeQuery();
+            while (resultSet.next()) {
+            	nomination = new Nomination();
+                nomination.setId(resultSet.getInt(1));
+                nomination.setName(resultSet.getString(2));
+                nomination.setYear(resultSet.getString(3));
+                nomination.setWon(resultSet.getBoolean(4));
+                nomination.setMovieId(resultSet.getInt(5));
+                foundNomination.add(nomination);
+                nomination = null;
+            }
+            
+        } catch (SQLException exc) {
+            exc.printStackTrace();
+        }
+		
+		return foundNomination;
+	}
 }

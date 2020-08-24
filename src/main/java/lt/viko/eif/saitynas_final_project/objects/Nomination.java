@@ -9,7 +9,7 @@ public class Nomination {
 	private int id;
 	private String name;
 	private String year;
-	private boolean won;
+	private Boolean won;
 	private int movieId;
 	
 	/**
@@ -20,7 +20,7 @@ public class Nomination {
 	 * @param won
 	 * @param movieId
 	 */
-	public Nomination(int id, String name, String year, boolean won, int movieId) {
+	public Nomination(int id, String name, String year, Boolean won, int movieId) {
 		this.id = id;
 		this.name = name;
 		this.year = year;
@@ -87,7 +87,7 @@ public class Nomination {
 	 * Returns true if movie won the nomination and false if didn't.
 	 * @return
 	 */
-	public boolean isWon() {
+	public Boolean isWon() {
 		return won;
 	}
 
@@ -95,7 +95,7 @@ public class Nomination {
 	 * Sets true if movie won the nomination and false if didn't
 	 * @param won
 	 */
-	public void setWon(boolean won) {
+	public void setWon(Boolean won) {
 		this.won = won;
 	}
 
