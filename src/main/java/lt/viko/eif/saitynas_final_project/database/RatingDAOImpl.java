@@ -4,8 +4,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
+import lt.viko.eif.saitynas_final_project.objects.Movie;
 import lt.viko.eif.saitynas_final_project.objects.Rating;
+import lt.viko.eif.saitynas_final_project.objects.Staff;
 
 public class RatingDAOImpl implements RatingDAO {
 	private Connection connection;
@@ -39,7 +43,6 @@ public class RatingDAOImpl implements RatingDAO {
             	result = generatedKeys.getInt(1);
             }
         } catch (SQLException exc) {
-            System.out.println(exc.getMessage());
             exc.printStackTrace();
         }
         
@@ -59,7 +62,6 @@ public class RatingDAOImpl implements RatingDAO {
             result += prepStmt.executeUpdate();
             
         } catch (SQLException exc) {
-            System.out.println(exc.getMessage());
             exc.printStackTrace();
         }
         
@@ -86,9 +88,8 @@ public class RatingDAOImpl implements RatingDAO {
 
             result += prepStmt.executeUpdate();
             
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-            ex.printStackTrace();
+        } catch (SQLException exc) {
+            exc.printStackTrace();
         }
 		
 		return result;
@@ -118,7 +119,6 @@ public class RatingDAOImpl implements RatingDAO {
             }
             
         } catch (SQLException exc) {
-            System.out.println(exc.getMessage());
             exc.printStackTrace();
         }
 		

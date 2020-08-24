@@ -1,5 +1,8 @@
 package lt.viko.eif.saitynas_final_project.services;
 
+import java.io.InputStream;
+import java.net.URL;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -11,11 +14,17 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.JSONTokener;
+
 import javax.ws.rs.core.MediaType;
 
 import lt.viko.eif.saitynas_final_project.database.RatingDAO;
 import lt.viko.eif.saitynas_final_project.database.RatingDAOImpl;
 import lt.viko.eif.saitynas_final_project.objects.Rating;
+import lt.viko.eif.saitynas_final_project.objects.RatingRequestOMDB;
 
 @Path("rating")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -25,7 +34,9 @@ public class RatingServiceImpl implements RatingService{
 	
 	@POST
 	@Override
-	public Response addRating(Rating rating, @Context UriInfo uriInfo) {
+	public Response addRating(RatingRequestOMDB requestTemplate, @Context UriInfo uriInfo) {
+		Rating rating = createRating(requestTemplate);
+		
 		if (ratingDAO.addRating(rating) != 0) {
 			//
 			return Response.ok("Added successfully!").build();
@@ -46,7 +57,9 @@ public class RatingServiceImpl implements RatingService{
 	
 	@PUT
 	@Override
-	public Response updateRatingById(Rating rating, @Context UriInfo uriInfo) {
+	public Response updateRatingByName(RatingRequestOMDB requestTemplate, @Context UriInfo uriInfo) {
+		Rating rating = createRating(requestTemplate);
+		
 		if (ratingDAO.updateRatingById(rating) != 0) {
 			//
 			return Response.ok("Updated successfully!").build();
@@ -65,5 +78,52 @@ public class RatingServiceImpl implements RatingService{
 			return Response.ok(rating).build();
 		}
 		return Response.serverError().build();
+	}
+	
+	public Rating createRating(RatingRequestOMDB requestTemplate) {
+		Rating rating = new Rating();
+		requestTemplate.setName(requestTemplate.getName().replace(' ', '+'));
+		
+		try {
+	        URL omdb = new URL("http://www.omdbapi.com/?t=" + requestTemplate.getName() + "&apikey=d9f2b01e");
+	        InputStream inputStream = omdb.openStream();
+	        
+	        JSONObject obj = new JSONObject(new JSONTokener(inputStream));
+	        
+	        rating.setImdb(Double.parseDouble(obj.getString("imdbRating")));
+	        String imdbVotesModified = (obj.getString("imdbVotes")).replace(",", "");
+	        rating.setImdbVotes(Integer.parseInt(imdbVotesModified));
+	        
+	        JSONArray ratings = obj.getJSONArray("Ratings");
+	        for (int i = 0; i < ratings.length(); i++)
+            {
+                JSONObject tempObj = ratings.getJSONObject(i);
+                String temp = null;
+                
+                if (tempObj.optString("Source").equals("Internet Movie Database")) {
+                	temp = (tempObj.optString("Value")).replace("/10", "");
+                	rating.setInternetMovieDatabase(Double.parseDouble(temp));
+                }
+                else if (tempObj.optString("Source").equals("Rotten Tomatoes")) {
+                	temp = (tempObj.optString("Value")).replace("%", "");
+                	rating.setRottenTomatoes(Double.parseDouble(temp));
+                }
+                else if (tempObj.optString("Source").equals("Metacritic")) {
+                	temp = (tempObj.optString("Value")).replace("/100", "");
+                	rating.setMetacritic(Double.parseDouble(temp));
+                }
+                else if (tempObj.optString("Source").equals("Metascore")) {
+                	temp = (tempObj.optString("Value")).replace("/100", "");
+                	rating.setMetascore(Double.parseDouble(temp));
+                }
+            }
+	        
+	        rating.setMovieId(requestTemplate.getMovieId());
+	        
+	    } catch (Exception exc){
+	        System.out.println(exc);
+	    }
+		
+		return rating;
 	}
 }

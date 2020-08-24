@@ -44,7 +44,6 @@ public class MovieDAOImpl implements MovieDAO{
             	result = generatedKeys.getInt(1);
             }
         } catch (SQLException exc) {
-            System.out.println(exc.getMessage());
             exc.printStackTrace();
         }
         
@@ -64,7 +63,6 @@ public class MovieDAOImpl implements MovieDAO{
             result += prepStmt.executeUpdate();
             
         } catch (SQLException exc) {
-            System.out.println(exc.getMessage());
             exc.printStackTrace();
         }
         
@@ -93,9 +91,8 @@ public class MovieDAOImpl implements MovieDAO{
 
             result += prepStmt.executeUpdate();
             
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-            ex.printStackTrace();
+        } catch (SQLException exc) {
+            exc.printStackTrace();
         }
 		
 		return result;
@@ -127,43 +124,11 @@ public class MovieDAOImpl implements MovieDAO{
             }
             
         } catch (SQLException exc) {
-            System.out.println(exc.getMessage());
             exc.printStackTrace();
         }
 		
 		return movie;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	@Override
 	public List<Movie> getMoviesByAttributes(MovieSearch movieSearch) {
@@ -275,7 +240,6 @@ public class MovieDAOImpl implements MovieDAO{
             }
             
         } catch (SQLException exc) {
-            System.out.println(exc.getMessage());
             exc.printStackTrace();
         }
 		
@@ -309,7 +273,6 @@ public class MovieDAOImpl implements MovieDAO{
             }
             
         } catch (SQLException exc) {
-            System.out.println(exc.getMessage());
             exc.printStackTrace();
         }
 		

@@ -6,15 +6,15 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import lt.viko.eif.saitynas_final_project.objects.Rating;
+import lt.viko.eif.saitynas_final_project.objects.RatingRequestOMDB;
 
 public interface RatingService {
-	Response addRating(Rating rating, @Context UriInfo uriInfo);
+	Response addRating(RatingRequestOMDB requestTemplate, @Context UriInfo uriInfo);
 	
 	@Path("{id}")
 	Response deleteRatingById(@PathParam("id") int id);
 	
-	Response updateRatingById(Rating rating, @Context UriInfo uriInfo);
+	Response updateRatingByName(RatingRequestOMDB requestTemplate, @Context UriInfo uriInfo);
 	
 	@Path("{id}")
 	Response getRatingById(@PathParam("id") int id, @Context UriInfo uriInfo);

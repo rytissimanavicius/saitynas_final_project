@@ -41,7 +41,6 @@ public class StaffDAOImpl implements StaffDAO {
             	result = generatedKeys.getInt(1);
             }
         } catch (SQLException exc) {
-            System.out.println(exc.getMessage());
             exc.printStackTrace();
         }
         
@@ -61,7 +60,6 @@ public class StaffDAOImpl implements StaffDAO {
             result += prepStmt.executeUpdate();
             
         } catch (SQLException exc) {
-            System.out.println(exc.getMessage());
             exc.printStackTrace();
         }
         
@@ -87,7 +85,6 @@ public class StaffDAOImpl implements StaffDAO {
             result += prepStmt.executeUpdate();
             
         } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
             ex.printStackTrace();
         }
 		
@@ -116,7 +113,6 @@ public class StaffDAOImpl implements StaffDAO {
             }
             
         } catch (SQLException exc) {
-            System.out.println(exc.getMessage());
             exc.printStackTrace();
         }
 		
@@ -204,7 +200,6 @@ public class StaffDAOImpl implements StaffDAO {
             }
             
         } catch (SQLException exc) {
-            System.out.println(exc.getMessage());
             exc.printStackTrace();
         }
 		
