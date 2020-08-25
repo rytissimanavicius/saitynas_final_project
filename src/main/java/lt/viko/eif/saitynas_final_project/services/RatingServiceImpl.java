@@ -1,7 +1,10 @@
 package lt.viko.eif.saitynas_final_project.services;
 
 import java.io.InputStream;
+import java.net.URI;
 import java.net.URL;
+import java.net.URLDecoder;
+import java.util.concurrent.TimeUnit;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -11,6 +14,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
@@ -18,6 +22,8 @@ import javax.ws.rs.core.UriInfo;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
+
+import com.jcabi.aspects.Cacheable;
 
 import javax.ws.rs.core.MediaType;
 
@@ -38,8 +44,8 @@ public class RatingServiceImpl implements RatingService{
 		Rating rating = createRating(requestTemplate);
 		
 		if (ratingDAO.addRating(rating) != 0) {
-			//
-			return Response.ok("Added successfully!").build();
+			rating.addLink(getUriForSelf(uriInfo, rating.getId()), "self");
+			return Response.ok(rating).build();
 		}
 		return Response.serverError().build();
 	}
@@ -47,11 +53,10 @@ public class RatingServiceImpl implements RatingService{
 	@DELETE
 	@Override
 	@Path("{id}")
-	public Response deleteRatingById(@PathParam("id") int id) {
-		if (ratingDAO.deleteRatingById(id) != 0) {
-			//
+	public Response deleteRatingById(@PathParam("id") int id, @Context UriInfo uriInfo) {
+		if (ratingDAO.deleteRatingById(id) != 0)
 			return Response.ok("Deleted successfully!").build();
-		}
+		
 		return Response.serverError().build();
 	}
 	
@@ -59,23 +64,29 @@ public class RatingServiceImpl implements RatingService{
 	@Override
 	public Response updateRatingByName(RatingRequestOMDB requestTemplate, @Context UriInfo uriInfo) {
 		Rating rating = createRating(requestTemplate);
+		rating.setId(requestTemplate.getId());
 		
 		if (ratingDAO.updateRatingById(rating) != 0) {
-			//
-			return Response.ok("Updated successfully!").build();
+			rating.addLink(getUriForSelf(uriInfo, rating.getId()), "self");
+			return Response.ok(rating).build();
 		}
 		return Response.serverError().build();
 	}
 	
 	@GET
+	@Cacheable(lifetime = 60, unit = TimeUnit.SECONDS)
 	@Override
 	@Path("{id}")
 	public Response getRatingById(@PathParam("id") int id, @Context UriInfo uriInfo) {
 		Rating rating = ratingDAO.getRatingById(id);
 		
 		if (rating != null) {
-			//
-			return Response.ok(rating).build();
+			rating.addLink(getUriForSelf(uriInfo, rating.getId()), "self");
+			
+			CacheControl cacheControl = new CacheControl();
+	        cacheControl.setMaxAge(60);
+
+	        return Response.ok(rating).cacheControl(cacheControl).build();
 		}
 		return Response.serverError().build();
 	}
@@ -126,4 +137,17 @@ public class RatingServiceImpl implements RatingService{
 		
 		return rating;
 	}
+	
+	private String getUriForSelf(UriInfo uriInfo, int id) {
+        URI uri = null;
+        String idString = String.valueOf(id);
+        
+        try {
+            uri = uriInfo.getBaseUriBuilder().path(this.getClass()).path(this.getClass(), "getRatingById")
+                    .resolveTemplate("id", URLDecoder.decode(idString, "UTF-8")).build();
+        } catch (Exception exc) {
+            exc.printStackTrace();
+        }
+        return uri.toString();
+    }
 }

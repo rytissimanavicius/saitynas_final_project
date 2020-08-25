@@ -9,6 +9,7 @@ public interface MovieDAO {
 	public int addMovie(Movie movie);
 	public int deleteMovieById(int id);
 	public int updateMovieById(Movie movie);
-	public Movie getMovieById(int id);
+	public Movie getMovieByTitle(String title);
 	public List<Movie> getMoviesByAttributes(MovieSearch movieSearch);
+	public Movie getMovieById(int id);
 }

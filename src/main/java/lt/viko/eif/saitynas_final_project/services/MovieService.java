@@ -12,10 +12,10 @@ public interface MovieService {
 	Response addMovie(Movie movie, @Context UriInfo uriInfo);
 	
 	@Path("{id}")
-	Response deleteMovieById(@PathParam("id") int id);
+	Response deleteMovieById(@PathParam("id") int id, @Context UriInfo uriInfo);
 	
 	Response updateMovieById(Movie movie, @Context UriInfo uriInfo);
 	
-	@Path("{id}")
-	Response getMovieById(@PathParam("id") int id, @Context UriInfo uriInfo);
+	@Path("{title}")
+	Response getMovieByTitle(@PathParam("title") String title, @Context UriInfo uriInfo);
 }

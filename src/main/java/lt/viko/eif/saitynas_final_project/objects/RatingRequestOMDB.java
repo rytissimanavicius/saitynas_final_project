@@ -6,15 +6,18 @@ package lt.viko.eif.saitynas_final_project.objects;
  *
  */
 public class RatingRequestOMDB {
+	private int id;
 	private String name;
 	private int movieId;
 	
 	/**
 	 * Main constructor, sets all attributes of an object.
+	 * @param id
 	 * @param name
 	 * @param movieId
 	 */
-	public RatingRequestOMDB(String name, int movieId) {
+	public RatingRequestOMDB(int id, String name, int movieId) {
+		this.id = id;
 		this.name = name;
 		this.movieId = movieId;
 	}
@@ -24,6 +27,22 @@ public class RatingRequestOMDB {
 	 */
 	public RatingRequestOMDB() {
 		
+	}
+	
+	/**
+	 * Returns id of a rating.
+	 * @return
+	 */
+	public int getId() {
+		return id;
+	}
+
+	/**
+	 * Sets id of a rating.
+	 * @param id
+	 */
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	/**

@@ -1,5 +1,8 @@
 package lt.viko.eif.saitynas_final_project.services;
 
+import java.net.URI;
+import java.net.URLDecoder;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -8,6 +11,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
@@ -28,8 +32,8 @@ public class StaffServiceImpl implements StaffService{
 	@Override
 	public Response addStaff(Staff staff, @Context UriInfo uriInfo) {
 		if (staffDAO.addStaff(staff) != 0) {
-			//
-			return Response.ok("Added successfully!").build();
+			staff.addLink(getUriForSelf(uriInfo, staff.getId()), "self");
+			return Response.ok(staff).build();
 		}
 		return Response.serverError().build();
 	}
@@ -37,11 +41,10 @@ public class StaffServiceImpl implements StaffService{
 	@DELETE
 	@Override
 	@Path("{id}")
-	public Response deleteStaffById(@PathParam("id") int id) {
-		if (staffDAO.deleteStaffById(id) != 0) {
-			//
+	public Response deleteStaffById(@PathParam("id") int id, @Context UriInfo uriInfo) {
+		if (staffDAO.deleteStaffById(id) != 0)
 			return Response.ok("Deleted successfully!").build();
-		}
+		
 		return Response.serverError().build();
 	}
 	
@@ -49,8 +52,8 @@ public class StaffServiceImpl implements StaffService{
 	@Override
 	public Response updateStaffById(Staff staff, @Context UriInfo uriInfo) {
 		if (staffDAO.updateStaffById(staff) != 0) {
-			//
-			return Response.ok("Updated successfully!").build();
+			staff.addLink(getUriForSelf(uriInfo, staff.getId()), "self");
+			return Response.ok(staff).build();
 		}
 		return Response.serverError().build();
 	}
@@ -62,9 +65,26 @@ public class StaffServiceImpl implements StaffService{
 		Staff staff = staffDAO.getStaffById(id);
 		
 		if (staff != null) {
-			//
-			return Response.ok(staff).build();
+			staff.addLink(getUriForSelf(uriInfo, staff.getId()), "self");
+			
+			CacheControl cacheControl = new CacheControl();
+	        cacheControl.setMaxAge(60);
+
+	        return Response.ok(staff).cacheControl(cacheControl).build();
 		}
 		return Response.serverError().build();
 	}
+	
+	private String getUriForSelf(UriInfo uriInfo, int id) {
+        URI uri = null;
+        String idString = String.valueOf(id);
+        
+        try {
+            uri = uriInfo.getBaseUriBuilder().path(this.getClass()).path(this.getClass(), "getStaffById")
+                    .resolveTemplate("id", URLDecoder.decode(idString, "UTF-8")).build();
+        } catch (Exception exc) {
+            exc.printStackTrace();
+        }
+        return uri.toString();
+    }
 }

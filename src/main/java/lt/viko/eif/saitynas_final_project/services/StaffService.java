@@ -12,7 +12,7 @@ public interface StaffService {
 	Response addStaff(Staff staff, @Context UriInfo uriInfo);
 	
 	@Path("{id}")
-	Response deleteStaffById(@PathParam("id") int id);
+	Response deleteStaffById(@PathParam("id") int id, @Context UriInfo uriInfo);
 	
 	Response updateStaffById(Staff staff, @Context UriInfo uriInfo);
 	

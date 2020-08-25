@@ -1,5 +1,10 @@
 package lt.viko.eif.saitynas_final_project.objects;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.ws.rs.core.Link;
+
 /**
  * Class for objects representing movies.
  * @author Rytis Simanavicius
@@ -16,6 +21,7 @@ public class Movie {
 	private String type;
 	private String producedBy;
 	private int genreId;
+	private List<Link> links = new ArrayList<>();
 	
 	/**
 	 * Main constructor, sets all attributes of an object.
@@ -209,5 +215,31 @@ public class Movie {
 	 */
 	public void setGenreId(int genreId) {
 		this.genreId = genreId;
+	}
+
+	/**
+	 * Returns a list of links.
+	 * @return
+	 */
+	public List<Link> getLinks() {
+		return links;
+	}
+
+	/**
+	 * Set list as a new list of links.
+	 * @param links
+	 */
+	public void setLinks(List<Link> links) {
+		this.links = links;
+	}
+
+	/**
+	 * Add new link to a list of links.
+	 * @param url
+	 * @param rel
+	 */
+	public void addLink(String url, String rel) {
+		Link link = Link.fromUri(url).rel(rel).build();
+        this.links.add(link);
 	}
 }

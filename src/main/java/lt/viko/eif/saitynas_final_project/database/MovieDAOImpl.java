@@ -99,14 +99,14 @@ public class MovieDAOImpl implements MovieDAO{
 	}
 	
 	@Override
-	public Movie getMovieById(int id) {
+	public Movie getMovieByTitle(String title) {
 		Movie movie = new Movie();
 		
 		try {
-            String query = "SELECT * FROM movie WHERE id = ?";
+            String query = "SELECT * FROM movie WHERE title = ?";
 
             PreparedStatement prepStmt = connection.prepareStatement(query);
-            prepStmt.setInt(1, id);
+            prepStmt.setString(1, title);
             
             ResultSet result = prepStmt.executeQuery();
             
@@ -133,7 +133,7 @@ public class MovieDAOImpl implements MovieDAO{
 	@Override
 	public List<Movie> getMoviesByAttributes(MovieSearch movieSearch) {
 		String query = "";
-		List<Movie> foundMovies = null;
+		List<Movie> foundMovies = new ArrayList<Movie>();
 		
 		if (!movieSearch.getTitle().isEmpty()) {
 			query = "SELECT * FROM movie WHERE title = ?";
@@ -212,6 +212,38 @@ public class MovieDAOImpl implements MovieDAO{
 			retrievedMovies.add(getMovieById(id));
 		
 		return retrievedMovies;
+	}
+	
+	@Override
+	public Movie getMovieById(int id) {
+		Movie movie = new Movie();
+		
+		try {
+            String query = "SELECT * FROM movie WHERE id = ?";
+
+            PreparedStatement prepStmt = connection.prepareStatement(query);
+            prepStmt.setInt(1, id);
+            
+            ResultSet result = prepStmt.executeQuery();
+            
+            while (result.next()) {
+                movie.setId(result.getInt(1));
+                movie.setTitle(result.getString(2));
+                movie.setYear(result.getInt(3));
+                movie.setRatedAs(result.getString(4));
+                movie.setLengthMinutes(result.getInt(5));
+                movie.setLanguages(result.getString(6));
+                movie.setCountry(result.getString(7));
+                movie.setType(result.getString(8));
+                movie.setProducedBy(result.getString(9));
+                movie.setGenreId(result.getInt(10));
+            }
+            
+        } catch (SQLException exc) {
+            exc.printStackTrace();
+        }
+		
+		return movie;
 	}
 	
 	public List<Movie> retrieveSuitableMovies(String query, String option) {

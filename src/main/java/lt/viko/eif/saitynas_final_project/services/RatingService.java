@@ -12,7 +12,7 @@ public interface RatingService {
 	Response addRating(RatingRequestOMDB requestTemplate, @Context UriInfo uriInfo);
 	
 	@Path("{id}")
-	Response deleteRatingById(@PathParam("id") int id);
+	Response deleteRatingById(@PathParam("id") int id, @Context UriInfo uriInfo);
 	
 	Response updateRatingByName(RatingRequestOMDB requestTemplate, @Context UriInfo uriInfo);
 	
