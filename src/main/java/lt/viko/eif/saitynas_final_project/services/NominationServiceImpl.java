@@ -1,5 +1,8 @@
 package lt.viko.eif.saitynas_final_project.services;
 
+import java.net.URI;
+import java.net.URLDecoder;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -8,14 +11,16 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import javax.ws.rs.core.MediaType;
 
 import lt.viko.eif.saitynas_final_project.database.NominationDAO;
 import lt.viko.eif.saitynas_final_project.database.NominationDAOImpl;
 import lt.viko.eif.saitynas_final_project.objects.Nomination;
+
+import javax.ws.rs.core.MediaType;
 
 @Path("nomination")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -27,7 +32,7 @@ public class NominationServiceImpl implements NominationService{
 	@Override
 	public Response addNomination(Nomination nomination, @Context UriInfo uriInfo) {
 		if (nominationDAO.addNomination(nomination) != 0) {
-			//
+			nomination.addLink(getUriForSelf(uriInfo, nomination.getId()), "self");
 			return Response.ok("Added successfully!").build();
 		}
 		return Response.serverError().build();
@@ -48,7 +53,7 @@ public class NominationServiceImpl implements NominationService{
 	@Override
 	public Response updateNominationById(Nomination nomination, @Context UriInfo uriInfo) {
 		if (nominationDAO.updateNominationById(nomination) != 0) {
-			//
+			nomination.addLink(getUriForSelf(uriInfo, nomination.getId()), "self");
 			return Response.ok("Updated successfully!").build();
 		}
 		return Response.serverError().build();
@@ -61,9 +66,24 @@ public class NominationServiceImpl implements NominationService{
 		Nomination nomination = nominationDAO.getNominationById(id);
 		
 		if (nomination != null) {
-			//
+			nomination.addLink(getUriForSelf(uriInfo, nomination.getId()), "self");
+			CacheControl cacheControl = new CacheControl();
+			cacheControl.setMaxAge(60);
 			return Response.ok(nomination).build();
 		}
 		return Response.serverError().build();
 	}
+	
+	private String getUriForSelf(UriInfo uriInfo, int id) {
+        URI uri = null;
+        String idString = String.valueOf(id);
+        
+        try {
+            uri = uriInfo.getBaseUriBuilder().path(this.getClass()).path(this.getClass(), "getNominationById")
+                    .resolveTemplate("id", URLDecoder.decode(idString, "UTF-8")).build();
+        } catch (Exception exc) {
+            exc.printStackTrace();
+        }
+        return uri.toString();
+    }
 }
