@@ -27,7 +27,7 @@ public interface MovieFinderService {
 	
 	/**
 	 * Use nomination attributes provided by the user to find the most suitable nomination and retrieve their designated movies.
-	 * @param staff
+	 * @param nomination
 	 * @param uriInfo
 	 * @return
 	 */
@@ -35,7 +35,7 @@ public interface MovieFinderService {
 	
 	/**
 	 * Use genre attributes provided by the user to find the most suitable genre and retrieve their designated movies.
-	 * @param staff
+	 * @param genre
 	 * @param uriInfo
 	 * @return
 	 */
