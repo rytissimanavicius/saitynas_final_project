@@ -37,7 +37,19 @@
         </dependencies>
     </dependencyManagement>
 
+	<repositories>
+	  <repository>
+	    <id>oss.sonatype.org</id>
+	    <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+	  </repository>
+	</repositories>
+
     <dependencies>
+	    <dependency>
+		    <groupId>com.jcabi</groupId>
+		    <artifactId>jcabi-aspects</artifactId>
+		    <version>0.22.6</version>
+		  </dependency>
         <dependency>
             <groupId>org.glassfish.jersey.containers</groupId>
             <artifactId>jersey-container-servlet-core</artifactId>
@@ -61,6 +73,11 @@
 		    <groupId>org.glassfish.jersey.test-framework.providers</groupId>
 		    <artifactId>jersey-test-framework-provider-jdk-http</artifactId>
 		    <version>2.22.1</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.json</groupId>
+		    <artifactId>json</artifactId>
+		    <version>20180130</version>
 		</dependency>
     </dependencies>
     <properties>

@@ -1,27 +1,22 @@
 package lt.viko.eif.saitynas_final_project.objects;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.ws.rs.core.Link;
-
 /**
- * Class for objects representing movies.
+ * Class for objects optimized for movie search.
  * @author Rytis Simanavicius
  *
  */
-public class Movie {
+public class MovieSearch {
 	private int id;
 	private String title;
 	private int year;
 	private String ratedAs;
-	private int lengthMinutes;
-	private String languages;
+	private int lengthMinutesMin;
+	private int lengthMinutesMax;
+	private String language;
 	private String country;
 	private String type;
 	private String producedBy;
 	private int genreId;
-	private List<Link> links = new ArrayList<>();
 	
 	/**
 	 * Main constructor, sets all attributes of an object.
@@ -29,21 +24,23 @@ public class Movie {
 	 * @param title
 	 * @param year
 	 * @param ratedAs
-	 * @param lengthMinutes
-	 * @param languages
+	 * @param lengthMinutesMin
+	 * @param lengthMinutesMax
+	 * @param language
 	 * @param country
 	 * @param type
 	 * @param producedBy
 	 * @param genreId
 	 */
-	public Movie(int id, String title, int year, String ratedAs, int lengthMinutes, String languages, String country,
-			String type, String producedBy, int genreId) {
+	public MovieSearch(int id, String title, int year, String ratedAs, int lengthMinutesMin, int lengthMinutesMax,
+			String language, String country, String type, String producedBy, int genreId) {
 		this.id = id;
 		this.title = title;
 		this.year = year;
 		this.ratedAs = ratedAs;
-		this.lengthMinutes = lengthMinutes;
-		this.languages = languages;
+		this.lengthMinutesMin = lengthMinutesMin;
+		this.lengthMinutesMax = lengthMinutesMax;
+		this.language = language;
 		this.country = country;
 		this.type = type;
 		this.producedBy = producedBy;
@@ -53,12 +50,12 @@ public class Movie {
 	/**
 	 * Default constructor.
 	 */
-	public Movie() {
+	public MovieSearch() {
 		
 	}
 
 	/**
-	 * Returns movie id.
+	 * Returns searched movie id.
 	 * @return
 	 */
 	public int getId() {
@@ -66,7 +63,7 @@ public class Movie {
 	}
 
 	/**
-	 * Sets movie id.
+	 * Sets searched movie id.
 	 * @param id
 	 */
 	public void setId(int id) {
@@ -74,7 +71,7 @@ public class Movie {
 	}
 
 	/**
-	 * Returns movie title.
+	 * Returns searched movie title.
 	 * @return
 	 */
 	public String getTitle() {
@@ -82,7 +79,7 @@ public class Movie {
 	}
 
 	/**
-	 * Sets movie title.
+	 * Sets searched movie title.
 	 * @param title
 	 */
 	public void setTitle(String title) {
@@ -90,7 +87,7 @@ public class Movie {
 	}
 
 	/**
-	 * Returns year movie was created.
+	 * Returns year searched movie was created.
 	 * @return
 	 */
 	public int getYear() {
@@ -98,7 +95,7 @@ public class Movie {
 	}
 
 	/**
-	 * Sets year movie was created.
+	 * Sets year searched movie was created.
 	 * @param year
 	 */
 	public void setYear(int year) {
@@ -106,7 +103,7 @@ public class Movie {
 	}
 
 	/**
-	 * Returns movie audience suitability rating.
+	 * Returns searched movie audience suitability rating.
 	 * @return
 	 */
 	public String getRatedAs() {
@@ -114,7 +111,7 @@ public class Movie {
 	}
 
 	/**
-	 * Sets movie audience suitability rating.
+	 * Sets searched movie audience suitability rating.
 	 * @param ratedAs
 	 */
 	public void setRatedAs(String ratedAs) {
@@ -122,39 +119,55 @@ public class Movie {
 	}
 
 	/**
-	 * Returns movie length.
+	 * Returns movie minimum length set for search.
 	 * @return
 	 */
-	public int getLengthMinutes() {
-		return lengthMinutes;
+	public int getLengthMinutesMin() {
+		return lengthMinutesMin;
 	}
 
 	/**
-	 * Sets move length.
-	 * @param lengthMinutes
+	 * Sets movie minimum length set for search.
+	 * @param lengthMinutesMin
 	 */
-	public void setLengthMinutes(int lengthMinutes) {
-		this.lengthMinutes = lengthMinutes;
+	public void setLengthMinutesMin(int lengthMinutesMin) {
+		this.lengthMinutesMin = lengthMinutesMin;
 	}
 
 	/**
-	 * Returns movie languages.
+	 * Returns movie maximum length set for search.
 	 * @return
 	 */
-	public String getLanguages() {
-		return languages;
+	public int getLengthMinutesMax() {
+		return lengthMinutesMax;
 	}
 
 	/**
-	 * Sets movie languages.
-	 * @param languages
+	 * Sets movie minimum length set for search.
+	 * @param lengthMinutesMax
 	 */
-	public void setLanguages(String languages) {
-		this.languages = languages;
+	public void setLengthMinutesMax(int lengthMinutesMax) {
+		this.lengthMinutesMax = lengthMinutesMax;
 	}
 
 	/**
-	 * Returns the country movie was made in.
+	 * Returns searched movie language.
+	 * @return
+	 */
+	public String getLanguage() {
+		return language;
+	}
+
+	/**
+	 * Sets searched movie language.
+	 * @param language
+	 */
+	public void setLanguage(String language) {
+		this.language = language;
+	}
+
+	/**
+	 * Returns searched movie country.
 	 * @return
 	 */
 	public String getCountry() {
@@ -162,7 +175,7 @@ public class Movie {
 	}
 
 	/**
-	 * Sets the country movie was made in.
+	 * Sets searched movie country.
 	 * @param country
 	 */
 	public void setCountry(String country) {
@@ -170,7 +183,7 @@ public class Movie {
 	}
 
 	/**
-	 * Returns movie type.
+	 * Returns searched movie type.
 	 * @return
 	 */
 	public String getType() {
@@ -178,7 +191,7 @@ public class Movie {
 	}
 
 	/**
-	 * Sets movie type.
+	 * Sets searched movie type.
 	 * @param type
 	 */
 	public void setType(String type) {
@@ -186,7 +199,7 @@ public class Movie {
 	}
 
 	/**
-	 * Returns the name of a company that made the movie.
+	 * Returns the name of a company that made the searched movie.
 	 * @return
 	 */
 	public String getProducedBy() {
@@ -194,7 +207,7 @@ public class Movie {
 	}
 
 	/**
-	 * Sets the name of a company that made the movie.
+	 * Sets the name of a company that made the searched movie.
 	 * @param producedBy
 	 */
 	public void setProducedBy(String producedBy) {
@@ -202,7 +215,7 @@ public class Movie {
 	}
 
 	/**
-	 * Returns movie genre id.
+	 * Returns searched movie genre id.
 	 * @return
 	 */
 	public int getGenreId() {
@@ -210,36 +223,10 @@ public class Movie {
 	}
 
 	/**
-	 * Sets movie genre id.
+	 * Sets searched movie genre id.
 	 * @param genreId
 	 */
 	public void setGenreId(int genreId) {
 		this.genreId = genreId;
-	}
-
-	/**
-	 * Returns a list of links.
-	 * @return
-	 */
-	public List<Link> getLinks() {
-		return links;
-	}
-
-	/**
-	 * Set list as a new list of links.
-	 * @param links
-	 */
-	public void setLinks(List<Link> links) {
-		this.links = links;
-	}
-
-	/**
-	 * Add new link to a list of links.
-	 * @param url
-	 * @param rel
-	 */
-	public void addLink(String url, String rel) {
-		Link link = Link.fromUri(url).rel(rel).build();
-        this.links.add(link);
 	}
 }
