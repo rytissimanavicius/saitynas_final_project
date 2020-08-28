@@ -4,6 +4,11 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+/**
+ * Database object.
+ * @author Rytis Simanavicius
+ *
+ */
 public class SqlConnection {
 	private Connection connection;
     private String url = "jdbc:mysql://localhost/saitynas_final_project?user=root&password=";
@@ -17,6 +22,10 @@ public class SqlConnection {
         }
     }
 
+    /**
+     * Method used to establish connection to the database.
+     * @return
+     */
     public Connection getConnection() {
         return connection;
     }

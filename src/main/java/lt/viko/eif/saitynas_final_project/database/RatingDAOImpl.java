@@ -11,10 +11,18 @@ import lt.viko.eif.saitynas_final_project.objects.Movie;
 import lt.viko.eif.saitynas_final_project.objects.Rating;
 import lt.viko.eif.saitynas_final_project.objects.RatingSearch;
 
+/**
+ * Implementation of CRUD operations with rating object.
+ * @author Rytis Simanavicius
+ *
+ */
 public class RatingDAOImpl implements RatingDAO {
 	private Connection connection;
 	private MovieDAO movieDAO = new MovieDAOImpl();
 	
+	/**
+	 * Object constructor that connects it to the database.
+	 */
 	public RatingDAOImpl() {
         SqlConnection sqlConnection = new SqlConnection();
         connection = sqlConnection.getConnection();
@@ -214,6 +222,13 @@ public class RatingDAOImpl implements RatingDAO {
 		return retrievedMovies;
 	}
 	
+	/**
+	 * Return a list of ratings when query is to find ratings between two values.
+	 * @param query
+	 * @param min
+	 * @param max
+	 * @return
+	 */
 	public List<Rating> retrieveSuitableMoviesBetweenRatings(String query, double min, double max) {
 		Rating rating = null;
 		List<Rating> foundRatings = new ArrayList<Rating>();
@@ -245,6 +260,13 @@ public class RatingDAOImpl implements RatingDAO {
 		return foundRatings;
 	}
 	
+	/**
+	 * Return a list of ratings when query is to find ratings between two vote counts.
+	 * @param query
+	 * @param min
+	 * @param max
+	 * @return
+	 */
 	public List<Rating> retrieveSuitableMoviesBetweenVoteCount(String query, int min, int max) {
 		Rating rating = null;
 		List<Rating> foundRatings = new ArrayList<Rating>();

@@ -10,9 +10,17 @@ import java.util.List;
 import lt.viko.eif.saitynas_final_project.objects.Movie;
 import lt.viko.eif.saitynas_final_project.objects.MovieSearch;
 
+/**
+ * Implementation of CRUD operations with movie object.
+ * @author Rytis Simanavicius
+ *
+ */
 public class MovieDAOImpl implements MovieDAO{
 	private Connection connection;
 	
+	/**
+	 * Object constructor that connects it to the database.
+	 */
 	public MovieDAOImpl() {
         SqlConnection sqlConnection = new SqlConnection();
         connection = sqlConnection.getConnection();
@@ -246,6 +254,12 @@ public class MovieDAOImpl implements MovieDAO{
 		return movie;
 	}
 	
+	/**
+	 * Return a list of movies when query is to find movies that match the optional attribute.
+	 * @param query
+	 * @param option
+	 * @return
+	 */
 	public List<Movie> retrieveSuitableMovies(String query, String option) {
 		Movie movie = null;
 		List<Movie> foundMovies = new ArrayList<Movie>();
@@ -278,6 +292,13 @@ public class MovieDAOImpl implements MovieDAO{
 		return foundMovies;
 	}
 	
+	/**
+	 * Return a list of movies when query is to find movies between two lengths.
+	 * @param query
+	 * @param min
+	 * @param max
+	 * @return
+	 */
 	public List<Movie> retrieveSuitableMoviesBetweenLengths(String query, int min, int max) {
 		Movie movie = null;
 		List<Movie> foundMovies = new ArrayList<Movie>();

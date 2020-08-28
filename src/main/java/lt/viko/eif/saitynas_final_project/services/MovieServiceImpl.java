@@ -24,6 +24,11 @@ import lt.viko.eif.saitynas_final_project.objects.Movie;
 import lt.viko.eif.saitynas_final_project.database.MovieDAO;
 import lt.viko.eif.saitynas_final_project.database.MovieDAOImpl;
 
+/**
+ * RESTful web service implementation which allows to perform CRUD operations with movie objects.
+ * @author Rytis Simanavicius
+ *
+ */
 @Path("movie")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
@@ -78,6 +83,12 @@ public class MovieServiceImpl implements MovieService{
 		return Response.serverError().build();
 	}
 	
+	/**
+	 * Returns URI of an object.
+	 * @param uriInfo
+	 * @param title
+	 * @return
+	 */
 	private String getUriForSelf(UriInfo uriInfo, String title) {
         URI uri = null;
         

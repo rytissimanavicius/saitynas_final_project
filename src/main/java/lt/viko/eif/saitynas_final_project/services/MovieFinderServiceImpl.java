@@ -30,6 +30,11 @@ import lt.viko.eif.saitynas_final_project.objects.MovieSearch;
 import lt.viko.eif.saitynas_final_project.objects.RatingSearch;
 import lt.viko.eif.saitynas_final_project.objects.Staff;
 
+/**
+ * RESTful web service implementation of methods that are used in finding movies.
+ * @author Rytis Simanavicius
+ *
+ */
 @Path("finder")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
@@ -101,8 +106,13 @@ public class MovieFinderServiceImpl implements MovieFinderService{
 		return Response.serverError().build();
 	}
 	
+	/**
+	 * Returns URI of an object.
+	 * @param uriInfo
+	 * @param title
+	 * @return
+	 */
 	private String getUriForSelf(UriInfo uriInfo, String title) {
-		System.out.println("kek");
         URI uri = null;
         
         try {

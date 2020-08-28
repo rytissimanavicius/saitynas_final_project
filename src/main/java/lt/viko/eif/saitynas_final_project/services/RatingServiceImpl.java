@@ -32,6 +32,11 @@ import lt.viko.eif.saitynas_final_project.database.RatingDAOImpl;
 import lt.viko.eif.saitynas_final_project.objects.Rating;
 import lt.viko.eif.saitynas_final_project.objects.RatingRequestOMDB;
 
+/**
+ * RESTful web service implementation which allows to perform CRUD operations with rating objects.
+ * @author Rytis Simanavicius
+ *
+ */
 @Path("rating")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
@@ -91,6 +96,11 @@ public class RatingServiceImpl implements RatingService{
 		return Response.serverError().build();
 	}
 	
+	/**
+	 * Create a rating object from the movie JSON that was provided by OMDB API.
+	 * @param requestTemplate
+	 * @return
+	 */
 	public Rating createRating(RatingRequestOMDB requestTemplate) {
 		Rating rating = new Rating();
 		requestTemplate.setName(requestTemplate.getName().replace(' ', '+'));
@@ -138,6 +148,12 @@ public class RatingServiceImpl implements RatingService{
 		return rating;
 	}
 	
+	/**
+	 * Returns URI of an object.
+	 * @param uriInfo
+	 * @param id
+	 * @return
+	 */
 	private String getUriForSelf(UriInfo uriInfo, int id) {
         URI uri = null;
         String idString = String.valueOf(id);

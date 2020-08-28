@@ -1,8 +1,8 @@
 package lt.viko.eif.saitynas_final_project.objects;
 
 /**
- * 
- * @author rytuc
+ * Class for objects optimized for rating search.
+ * @author Rytis Simanavicius
  *
  */
 public class RatingSearch {
@@ -22,7 +22,7 @@ public class RatingSearch {
 	private int movieId;
 	
 	/**
-	 * 
+	 * Main constructor, sets all attributes of an object.
 	 * @param id
 	 * @param internetMovieDatabaseMin
 	 * @param internetMovieDatabaseMax
@@ -59,14 +59,14 @@ public class RatingSearch {
 	}
 	
 	/**
-	 * 
+	 * Default constructor.
 	 */
 	public RatingSearch() {
 		
 	}
 
 	/**
-	 * 
+	 * Returns searched rating id.
 	 * @return
 	 */
 	public int getId() {
@@ -74,7 +74,7 @@ public class RatingSearch {
 	}
 
 	/**
-	 * 
+	 * Sets searched rating id.
 	 * @param id
 	 */
 	public void setId(int id) {
@@ -82,7 +82,7 @@ public class RatingSearch {
 	}
 
 	/**
-	 * 
+	 * Returns searched internet movie database minimum rating.
 	 * @return
 	 */
 	public double getInternetMovieDatabaseMin() {
@@ -90,7 +90,7 @@ public class RatingSearch {
 	}
 
 	/**
-	 * 
+	 * Sets searched internet movie database minimum rating.
 	 * @param internetMovieDatabaseMin
 	 */
 	public void setInternetMovieDatabaseMin(double internetMovieDatabaseMin) {
@@ -98,7 +98,7 @@ public class RatingSearch {
 	}
 
 	/**
-	 * 
+	 * Returns searched internet movie database maximum rating.
 	 * @return
 	 */
 	public double getInternetMovieDatabaseMax() {
@@ -106,7 +106,7 @@ public class RatingSearch {
 	}
 
 	/**
-	 * 
+	 * Sets searched internet movie database maximum rating.
 	 * @param internetMovieDatabaseMax
 	 */
 	public void setInternetMovieDatabaseMax(double internetMovieDatabaseMax) {
@@ -114,7 +114,7 @@ public class RatingSearch {
 	}
 
 	/**
-	 * 
+	 * Returns searched rotten tomatoes minimum rating.
 	 * @return
 	 */
 	public double getRottenTomatoesMin() {
@@ -122,7 +122,7 @@ public class RatingSearch {
 	}
 
 	/**
-	 * 
+	 * Sets searched rotten tomatoes minimum rating.
 	 * @param rottenTomatoesMin
 	 */
 	public void setRottenTomatoesMin(double rottenTomatoesMin) {
@@ -130,7 +130,7 @@ public class RatingSearch {
 	}
 
 	/**
-	 * 
+	 * Returns searched rotten tomatoes maximum rating.
 	 * @return
 	 */
 	public double getRottenTomatoesMax() {
@@ -138,7 +138,7 @@ public class RatingSearch {
 	}
 
 	/**
-	 * 
+	 * Sets searched rotten tomatoes maximum rating.
 	 * @param rottenTomatoesMax
 	 */
 	public void setRottenTomatoesMax(double rottenTomatoesMax) {
@@ -146,7 +146,7 @@ public class RatingSearch {
 	}
 
 	/**
-	 * 
+	 * Returns searched metacritic minimum rating.
 	 * @return
 	 */
 	public double getMetacriticMin() {
@@ -154,7 +154,7 @@ public class RatingSearch {
 	}
 
 	/**
-	 * 
+	 * Sets searched metacritic minimum rating.
 	 * @param metacriticMin
 	 */
 	public void setMetacriticMin(double metacriticMin) {
@@ -162,7 +162,7 @@ public class RatingSearch {
 	}
 
 	/**
-	 * 
+	 * Returns searched metacritic maximum rating.
 	 * @return
 	 */
 	public double getMetacriticMax() {
@@ -170,7 +170,7 @@ public class RatingSearch {
 	}
 
 	/**
-	 * 
+	 * Sets searched metacritic maximum rating.
 	 * @param metacriticMax
 	 */
 	public void setMetacriticMax(double metacriticMax) {
@@ -178,7 +178,7 @@ public class RatingSearch {
 	}
 
 	/**
-	 * 
+	 * Returns searched metascore minimum rating.
 	 * @return
 	 */
 	public double getMetascoreMin() {
@@ -186,7 +186,7 @@ public class RatingSearch {
 	}
 
 	/**
-	 * 
+	 * Sets searched metascore minimum rating.
 	 * @param metascoreMin
 	 */
 	public void setMetascoreMin(double metascoreMin) {
@@ -194,7 +194,7 @@ public class RatingSearch {
 	}
 
 	/**
-	 * 
+	 * Returns searched metascore maximum rating.
 	 * @return
 	 */
 	public double getMetascoreMax() {
@@ -202,7 +202,7 @@ public class RatingSearch {
 	}
 
 	/**
-	 * 
+	 * Sets searched metascore maximum rating.
 	 * @param metascoreMax
 	 */
 	public void setMetascoreMax(double metascoreMax) {
@@ -210,7 +210,7 @@ public class RatingSearch {
 	}
 
 	/**
-	 * 
+	 * Returns searched imdb minimum rating.
 	 * @return
 	 */
 	public double getImdbMin() {
@@ -218,7 +218,7 @@ public class RatingSearch {
 	}
 
 	/**
-	 * 
+	 * Sets searched imdb minimum rating.
 	 * @param imdbMin
 	 */
 	public void setImdbMin(double imdbMin) {
@@ -226,7 +226,7 @@ public class RatingSearch {
 	}
 
 	/**
-	 * 
+	 * Returns searched imdb maximum rating.
 	 * @return
 	 */
 	public double getImdbMax() {
@@ -234,7 +234,7 @@ public class RatingSearch {
 	}
 
 	/**
-	 * 
+	 * Sets searched imdb maximum rating.
 	 * @param imdbMax
 	 */
 	public void setImdbMax(double imdbMax) {
@@ -242,7 +242,7 @@ public class RatingSearch {
 	}
 
 	/**
-	 * 
+	 * Returns searched imdb votes minimum value.
 	 * @return
 	 */
 	public int getImdbVotesMin() {
@@ -250,7 +250,7 @@ public class RatingSearch {
 	}
 
 	/**
-	 * 
+	 * Sets searched imdb votes minimum value.
 	 * @param imdbVotesMin
 	 */
 	public void setImdbVotesMin(int imdbVotesMin) {
@@ -258,7 +258,7 @@ public class RatingSearch {
 	}
 
 	/**
-	 * 
+	 * Returns searched imdb votes maximum value
 	 * @return
 	 */
 	public int getImdbVotesMax() {
@@ -266,7 +266,7 @@ public class RatingSearch {
 	}
 
 	/**
-	 * 
+	 * Sets searched imdb votes maximum value
 	 * @param imdbVotesMax
 	 */
 	public void setImdbVotesMax(int imdbVotesMax) {
@@ -274,7 +274,7 @@ public class RatingSearch {
 	}
 
 	/**
-	 * 
+	 * Returns movie id who these ratings belong to.
 	 * @return
 	 */
 	public int getMovieId() {
@@ -282,7 +282,7 @@ public class RatingSearch {
 	}
 
 	/**
-	 * 
+	 * Sets movie id who these ratings belong to.
 	 * @param movieId
 	 */
 	public void setMovieId(int movieId) {

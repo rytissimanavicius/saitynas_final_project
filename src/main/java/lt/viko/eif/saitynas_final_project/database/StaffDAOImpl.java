@@ -10,10 +10,18 @@ import java.util.List;
 import lt.viko.eif.saitynas_final_project.objects.Movie;
 import lt.viko.eif.saitynas_final_project.objects.Staff;
 
+/**
+ * Implementation of CRUD operations with staff object.
+ * @author Rytis Simanavicius
+ *
+ */
 public class StaffDAOImpl implements StaffDAO {
 	private Connection connection;
 	private MovieDAO movieDAO = new MovieDAOImpl();
 	
+	/**
+	 * Object constructor that connects it to the database.
+	 */
 	public StaffDAOImpl() {
         SqlConnection sqlConnection = new SqlConnection();
         connection = sqlConnection.getConnection();
@@ -178,6 +186,12 @@ public class StaffDAOImpl implements StaffDAO {
 		return retrievedMovies;
 	}
 	
+	/**
+	 * Return a list of staff when query is to find staff that match the optional attribute.
+	 * @param query
+	 * @param option
+	 * @return
+	 */
 	public List<Staff> retrieveSuitableStaff(String query, String option) {
 		Staff staff = null;
 		List<Staff> foundStaff = new ArrayList<Staff>();

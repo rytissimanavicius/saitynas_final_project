@@ -9,9 +9,41 @@ import lt.viko.eif.saitynas_final_project.objects.MovieSearch;
 import lt.viko.eif.saitynas_final_project.objects.RatingSearch;
 import lt.viko.eif.saitynas_final_project.objects.Staff;
 
+/**
+ * RESTful web service interface of methods that are used in finding movies.
+ * @author Rytis Simanavicius
+ *
+ */
 public interface MovieFinderService {
+	/**
+	 * Use staff attributes provided by the user to find the most suitable staff and retrieve their designated movies.
+	 * @param staff
+	 * @param uriInfo
+	 * @return
+	 */
 	public Response getMoviesByStaff(Staff staff, @Context UriInfo uriInfo);
+	
+	/**
+	 * Use movie attributes provided by the user to find the most suitable movies and retrieve them.
+	 * @param movieSearch
+	 * @param uriInfo
+	 * @return
+	 */
 	public Response getMoviesByAttributes(MovieSearch movieSearch, @Context UriInfo uriInfo);
+	
+	/**
+	 * Use rating attributes provided by the user to find the most suitable ratings and retrieve their designated movies.
+	 * @param ratingSearch
+	 * @param uriInfo
+	 * @return
+	 */
 	public Response getMoviesByRatings(RatingSearch ratingSearch, @Context UriInfo uriInfo);
+	
+	/**
+	 * Use title provided by the user to retrieve movies that match it.
+	 * @param title
+	 * @param uriInfo
+	 * @return
+	 */
 	public Response getMovieByTitle(@PathParam(value = "title") String title, @Context UriInfo uriInfo);
 }
