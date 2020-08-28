@@ -10,10 +10,18 @@ import java.util.List;
 import lt.viko.eif.saitynas_final_project.objects.Movie;
 import lt.viko.eif.saitynas_final_project.objects.Nomination;
 
+/**
+ * Implementation of CRUD operations with nominaiton object.
+ * @author Erikas Bykovskis
+ *
+ */
 public class NominationDAOImpl implements NominationDAO{
 	private Connection connection;
 	private MovieDAO movieDAO = new MovieDAOImpl();
 	
+	/**
+	 * Object constructor that connects it to the database.
+	 */
 	public NominationDAOImpl() {
         SqlConnection sqlConnection = new SqlConnection();
         connection = sqlConnection.getConnection();
@@ -168,6 +176,12 @@ public class NominationDAOImpl implements NominationDAO{
 		return retrievedMovies;
 	}
 
+	/**
+	 * Return a list of nomination when query is to find nomination that match the optional attribute.
+	 * @param query
+	 * @param option
+	 * @return
+	 */
 	public List<Nomination> retrieveSuitableNomination(String query, String option) {
 		Nomination nomination = null;
 		List<Nomination> foundNomination = new ArrayList<Nomination>();

@@ -22,6 +22,11 @@ import lt.viko.eif.saitynas_final_project.objects.Genre;
 
 import javax.ws.rs.core.MediaType;
 
+/**
+ * RESTful web service implementation which allows to perform CRUD operations with staff objects.
+ * @author Erikas Bykovskis
+ *
+ */
 @Path("genre")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
@@ -74,6 +79,12 @@ public class GenreServiceImpl implements GenreService{
 		return Response.serverError().build();
 	}
 	
+	/**
+	 * Returns URI of an object.
+	 * @param uriInfo
+	 * @param id
+	 * @return
+	 */
 	private String getUriForSelf(UriInfo uriInfo, int id) {
         URI uri = null;
         String idString = String.valueOf(id);

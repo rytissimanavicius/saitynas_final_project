@@ -7,7 +7,7 @@ import javax.ws.rs.core.Link;
 
 /**
  * Class for objects representing movie nominations.
- * @author Rytis Simanavicius
+ * @author Erikas Bykovskis
  *
  */
 public class Nomination {

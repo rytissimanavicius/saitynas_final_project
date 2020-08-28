@@ -10,10 +10,18 @@ import java.util.List;
 import lt.viko.eif.saitynas_final_project.objects.Genre;
 import lt.viko.eif.saitynas_final_project.objects.Movie;
 
+/**
+ * Implementation of CRUD operations with genre object.
+ * @author Erikas Bykovskis
+ *
+ */
 public class GenreDAOImpl implements GenreDAO{
 private Connection connection;
 private MovieDAO movieDAO = new MovieDAOImpl();
 	
+	/**
+	 * Object constructor that connects it to the database.
+	 */
 	public GenreDAOImpl() {
         SqlConnection sqlConnection = new SqlConnection();
         connection = sqlConnection.getConnection();
@@ -151,6 +159,12 @@ private MovieDAO movieDAO = new MovieDAOImpl();
 		return retrievedMovies;
 	}
 
+	/**
+	 * Return a list of genre when query is to find genre that match the optional attribute.
+	 * @param query
+	 * @param option
+	 * @return
+	 */
 	public List<Genre> retrieveSuitableGenre(String query, String option) {
 		Genre genre = null;
 		List<Genre> foundGenre = new ArrayList<Genre>();
