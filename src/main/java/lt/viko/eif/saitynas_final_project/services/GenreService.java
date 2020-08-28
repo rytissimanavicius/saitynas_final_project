@@ -30,7 +30,7 @@ public interface GenreService {
 	 * @return
 	 */
 	@Path("{id}")
-	Response deleteGenreById(@PathParam("id") int id);
+	Response deleteGenreById(@PathParam("id") int id, @Context UriInfo uriInfo);
 	
 	/**
 	 * Request to update a genre object in the database with a provided one if id matches.

@@ -19,14 +19,20 @@ import javax.ws.rs.core.UriInfo;
 
 import com.jcabi.aspects.Cacheable;
 
+import lt.viko.eif.saitynas_final_project.database.GenreDAO;
+import lt.viko.eif.saitynas_final_project.database.GenreDAOImpl;
 import lt.viko.eif.saitynas_final_project.database.MovieDAO;
 import lt.viko.eif.saitynas_final_project.database.MovieDAOImpl;
+import lt.viko.eif.saitynas_final_project.database.NominationDAO;
+import lt.viko.eif.saitynas_final_project.database.NominationDAOImpl;
 import lt.viko.eif.saitynas_final_project.database.RatingDAO;
 import lt.viko.eif.saitynas_final_project.database.RatingDAOImpl;
 import lt.viko.eif.saitynas_final_project.database.StaffDAO;
 import lt.viko.eif.saitynas_final_project.database.StaffDAOImpl;
+import lt.viko.eif.saitynas_final_project.objects.Genre;
 import lt.viko.eif.saitynas_final_project.objects.Movie;
 import lt.viko.eif.saitynas_final_project.objects.MovieSearch;
+import lt.viko.eif.saitynas_final_project.objects.Nomination;
 import lt.viko.eif.saitynas_final_project.objects.RatingSearch;
 import lt.viko.eif.saitynas_final_project.objects.Staff;
 
@@ -42,6 +48,8 @@ public class MovieFinderServiceImpl implements MovieFinderService{
 	private StaffDAO staffDAO = new StaffDAOImpl();
 	private MovieDAO movieDAO = new MovieDAOImpl();
 	private RatingDAO ratingDAO = new RatingDAOImpl();
+	private GenreDAO genreDAO = new GenreDAOImpl();
+	private NominationDAO nominationDAO = new NominationDAOImpl();
 	
 	@POST
 	@Path("byStaff")
@@ -123,4 +131,34 @@ public class MovieFinderServiceImpl implements MovieFinderService{
         }
         return uri.toString();
     }
+
+	@POST
+	@Path("byGenres")
+	@Override
+	public Response getMoviesByGenres(Genre genre, @Context UriInfo uriInfo) {
+		List<Movie> retrievedMovies = genreDAO.getMoviesByGenres(genre);
+		
+		for (Movie movie : retrievedMovies)
+			movie.addLink(getUriForSelf(uriInfo, movie.getTitle()), "self");
+		
+		if (retrievedMovies.size() > 0)
+			return Response.ok(retrievedMovies).build();
+		
+		return Response.serverError().build();
+	}
+
+	@POST
+	@Path("byNominations")
+	@Override
+	public Response getMoviesByNominations(Nomination nomination, @Context UriInfo uriInfo) {
+		List<Movie> retrievedMovies = nominationDAO.getMoviesByNominations(nomination);
+		
+		for (Movie movie : retrievedMovies)
+			movie.addLink(getUriForSelf(uriInfo, movie.getTitle()), "self");
+		
+		if (retrievedMovies.size() > 0)
+			return Response.ok(retrievedMovies).build();
+		
+		return Response.serverError().build();
+	}
 }

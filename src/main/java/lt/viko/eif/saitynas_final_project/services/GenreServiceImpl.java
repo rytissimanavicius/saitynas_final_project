@@ -45,7 +45,7 @@ public class GenreServiceImpl implements GenreService{
 	@DELETE
 	@Override
 	@Path("{id}")
-	public Response deleteGenreById(@PathParam("id") int id) {
+	public Response deleteGenreById(@PathParam("id") int id, @Context UriInfo uriInfo) {
 		if (genreDAO.deleteGenreById(id) != 0) {
 			//
 			return Response.ok("Deleted successfully!").build();

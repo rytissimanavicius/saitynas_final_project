@@ -81,6 +81,7 @@ private MovieDAO movieDAO = new MovieDAOImpl();
 
             PreparedStatement prepStmt = connection.prepareStatement(query);
             prepStmt.setString(1, genre.getName());
+            prepStmt.setInt(2, genre.getId());
 
             result += prepStmt.executeUpdate();
             
