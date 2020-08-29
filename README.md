@@ -2,10 +2,10 @@
 
 
 
-# Contents
+## Contents
 
-- [Heading](#heading)
-- [Heading](#heading-1)
+* [About](#about)
+* [Credits](#credits)
 
 ## About
 
